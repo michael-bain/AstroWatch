@@ -128,6 +128,13 @@ Download the latest APK from the Releases section of this repository.
 
 </table>
 
+## Technical Notes
+
+- Built with Expo and React Native
+- Designed for the Mudita Kompakt
+- Open source under the MIT License
+- Source code and issue tracking available in this repository
+
 ## License
 
 MIT License
