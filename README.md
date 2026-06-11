@@ -52,17 +52,55 @@ Download the latest APK from the Releases section of this repository.
 
 ## FAQ
 
-### Does AstroWatch work offline?
+<table>
+  <tr>
+    <th>Question</th>
+    <th>Answer</th>
+  </tr>
 
-Yes. Once a location has been selected, astronomical calculations work without an internet connection. The app saves your three most recent locations, so they can all be accessed offline. 
+  <tr>
+    <td>Does AstroWatch work offline?</td>
+    <td>
+      Yes. Once a location has been selected, astronomical calculations work without an internet connection. The app saves your three most recent locations, so they can all be accessed offline.
+    </td>
+  </tr>
 
-### Why do some locations show "No Astro Night"?
+  <tr>
+    <td>Is my location being tracked?</td>
+    <td>
+      No. Locations are selected manually rather than using the device's GPS.
+    </td>
+  </tr>
 
-Some locations do not reach astronomical darkness (sun 18 degrees below horizon) during parts of the year.
+  <tr>
+    <td>What is Astro Dawn and Astro Dusk?</td>
+    <td>
+      Astronomical dusk is the instant, well after sunset, when the center of the Sun dips to 18 degrees below the horizon. Astronomical dawn occurs at the moment, well before sunrise, when the center of the Sun rises above 18 degrees below the horizon. The darkest period of night occurs between astronomical dusk and dawn.
+    </td>
+  </tr>
 
-### Why can moonset appear above moonrise?
+  <tr>
+    <td>Why do some locations show "No Astro Night"?</td>
+    <td>
+      Some locations do not reach astronomical darkness (sun 18 degrees below the horizon) during parts of the year.
+    </td>
+  </tr>
 
-Events are displayed in chronological order. On some dates, the moon sets before it rises later that day.
+  <tr>
+    <td>Why can moonset appear above moonrise?</td>
+    <td>
+      Events are displayed in chronological order. On some dates, the moon sets before it rises later that day.
+    </td>
+  </tr>
+
+  <tr>
+    <td>What do the letters next to the moonrise and moonset times indicate?</td>
+    <td>
+      The letters indicate the direction of the moonrise and moonset. For example, "N" is north and "WSW" is west-southwest.
+    </td>
+  </tr>
+
+</table>
 
 ## License
 
