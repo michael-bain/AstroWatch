@@ -4,7 +4,7 @@ AstroWatch is a lightweight astronomy app designed for e-ink display on the Mudi
 
 ## Mindful Design
 
-AstroWatch was designed specifically for the Mudita Kompakt, as an intentional, minimalistic tool providing useful info that encourages users to spent more time enjoying the natural world and less time on their phone. 
+AstroWatch was designed specifically for the Mudita Kompakt as an intentional, minimalistic tool providing useful info that encourages users to spent more time enjoying the natural world and less time on their phone. 
 
 Key design decisions include:
 
