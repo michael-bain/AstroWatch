@@ -2,8 +2,34 @@
 
 AstroWatch is a lightweight astronomy app designed for e-ink display on the Mudita Kompakt. 
 
+## Mindful Design
 
-## Features
+AstroWatch was designed specifically for the Mudita Kompakt, as an intentional, minimalistic tool providing useful info that encourages users to spent more time enjoying the natural world and less time on their phone. 
+
+Key design decisions include:
+
+- No advertisements
+- No notifications
+- No accounts or sign-in requirements
+- No location tracking or GPS dependency
+- Offline operation after location selection
+- Minimal visual clutter
+- Optimized for the Mudita Kompakt e-ink display
+
+## Why AstroWatch?
+
+Many astronomy applications are designed for smartphones with vibrant animations, extensive menus, and complex features.
+
+AstroWatch instead focuses on the information most frequently needed by casual stargazers, astrophotographers, and outdoor enthusiasts:
+
+- Sunrise and sunset
+- Moonrise and moonset
+- Lunar phase
+- Astronomical darkness
+
+By presenting helpful information in a concise layout, AstroWatch remains easy to use on e-paper devices like the Mudita Kompakt.
+
+## Feature List
 
 - Sunrise and sunset times
 - Astronomical dawn and dusk times
