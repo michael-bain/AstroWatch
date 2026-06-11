@@ -13,7 +13,6 @@ Key design decisions include:
 - No accounts or sign-in requirements
 - No location tracking or GPS dependency
 - Offline operation after location selection
-- Minimal visual clutter
 - Optimized for the Mudita Kompakt e-ink display
 
 ## Why AstroWatch?
@@ -34,7 +33,7 @@ By presenting helpful information in a concise layout, AstroWatch remains easy t
 - Sunrise and sunset times
 - Astronomical dawn and dusk times
 - Moonrise and moonset times & direction
-- Current Lunar phase & monthly calendar
+- Current lunar phase & monthly calendar
 - Worldwide location support
 - Offline support for up to 3 locations
 - Manual location input - no tracking
