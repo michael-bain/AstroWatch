@@ -272,12 +272,16 @@ export function formatCoords(lat: number, lon: number): string {
 
 export function formatDate(date: Date, timezone?: string): string {
   if (timezone) {
-    return date.toLocaleDateString('en-GB', {
-      timeZone: timezone,
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
+    try {
+      return date.toLocaleDateString('en-GB', {
+        timeZone: timezone,
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+    } catch {
+      // Invalid timezone — fall through to device-local format
+    }
   }
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const d = date.getDate();
@@ -308,27 +312,34 @@ export interface AstroData {
 // as seen in the given IANA timezone. Probes at noon UTC to get a DST-stable
 // offset (DST transitions almost never occur at midnight).
 export function getLocationMidnightUTC(date: Date, timezone: string): Date {
-  // en-CA reliably formats as "YYYY-MM-DD"
-  const localDateStr = new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(date);
-  const [Y, M, D] = localDateStr.split('-').map(Number);
+  try {
+    // en-CA reliably formats as "YYYY-MM-DD"
+    const localDateStr = new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(date);
+    const [Y, M, D] = localDateStr.split('-').map(Number);
 
-  const probeUTC = new Date(Date.UTC(Y, M - 1, D, 12));
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: timezone,
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
-    hour12: false,
-  }).formatToParts(probeUTC);
-  const get = (type: string) => {
-    const v = parts.find((p) => p.type === type)?.value ?? '0';
-    return Number(v === '24' ? '0' : v);
-  };
-  // offset = local(probe) − UTC(probe) in seconds; probe was 12:00 UTC
-  const offsetSec = (get('hour') - 12) * 3600 + get('minute') * 60 + get('second');
+    const probeUTC = new Date(Date.UTC(Y, M - 1, D, 12));
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    }).formatToParts(probeUTC);
+    const get = (type: string) => {
+      const v = parts.find((p) => p.type === type)?.value ?? '0';
+      return Number(v === '24' ? '0' : v);
+    };
+    // offset = local(probe) − UTC(probe) in seconds; probe was 12:00 UTC
+    const offsetSec = (get('hour') - 12) * 3600 + get('minute') * 60 + get('second');
 
-  // midnight_local = midnight_UTC + offset  →  midnight_UTC = Date.UTC(Y,M-1,D) − offset
-  return new Date(Date.UTC(Y, M - 1, D) - offsetSec * 1000);
+    // midnight_local = midnight_UTC + offset  →  midnight_UTC = Date.UTC(Y,M-1,D) − offset
+    return new Date(Date.UTC(Y, M - 1, D) - offsetSec * 1000);
+  } catch {
+    // Invalid or unrecognized IANA timezone — fall back to device-local midnight
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
 }
 
 // Returns noon in the location timezone for the calendar day that `date` falls on

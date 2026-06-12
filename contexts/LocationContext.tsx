@@ -20,6 +20,22 @@ const LocationContext = createContext<LocationContextValue>({
   setPlace: () => {},
 });
 
+function isValidTimezone(tz: string): boolean {
+  try {
+    Intl.DateTimeFormat(undefined, { timeZone: tz });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function scrubTimezone(p: GeocodedPlace): GeocodedPlace {
+  if (p.timezone && !isValidTimezone(p.timezone)) {
+    return { ...p, timezone: undefined };
+  }
+  return p;
+}
+
 function mergeIntoRecents(recents: GeocodedPlace[], incoming: GeocodedPlace): GeocodedPlace[] {
   const filtered = recents.filter((r) => r.name !== incoming.name);
   return [incoming, ...filtered].slice(0, MAX_RECENTS);
@@ -71,7 +87,7 @@ export function LocationProvider({ children }: { children: ReactNode }) {
 
         let loadedRecents: GeocodedPlace[] = [];
         if (rawRecents) {
-          try { loadedRecents = JSON.parse(rawRecents); } catch {}
+          try { loadedRecents = (JSON.parse(rawRecents) as GeocodedPlace[]).map(scrubTimezone); } catch {}
         }
         setRecents(loadedRecents);
 
@@ -79,7 +95,7 @@ export function LocationProvider({ children }: { children: ReactNode }) {
           void backfillRecentsTimezones(loadedRecents, setRecents);
           return;
         }
-        const parsed: GeocodedPlace = JSON.parse(rawPlace);
+        const parsed: GeocodedPlace = scrubTimezone(JSON.parse(rawPlace));
         setPlaceState(parsed);
 
         if (!parsed.timezone) {
