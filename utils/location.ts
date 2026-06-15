@@ -88,7 +88,11 @@ export async function fetchTimezone(lat: number, lon: number): Promise<string | 
     );
     if (!res.ok) return undefined;
     const data = await res.json();
-    return data.timeZone ?? undefined;
+    const tz: unknown = data.timeZone;
+    if (typeof tz !== 'string' || !tz) return undefined;
+    // Reject non-IANA strings (e.g. "Mountain Standard Time") that Android ICU rejects
+    try { Intl.DateTimeFormat(undefined, { timeZone: tz }); } catch { return undefined; }
+    return tz;
   } catch {
     return undefined;
   }

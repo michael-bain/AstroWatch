@@ -80,12 +80,16 @@ function daysInMonth(year: number, month: number): number {
 // Extracts { year, month (0-indexed), day } from a Date in the given timezone,
 // falling back to device-local when no timezone is provided.
 function getLocalDateParts(date: Date, timezone?: string): { year: number; month: number; day: number } {
-  if (!timezone) {
-    return { year: date.getFullYear(), month: date.getMonth(), day: date.getDate() };
+  if (timezone) {
+    try {
+      const str = new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(date);
+      const [Y, M, D] = str.split('-').map(Number);
+      return { year: Y, month: M - 1, day: D };
+    } catch {
+      // Invalid timezone — fall through to device-local
+    }
   }
-  const str = new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(date);
-  const [Y, M, D] = str.split('-').map(Number);
-  return { year: Y, month: M - 1, day: D };
+  return { year: date.getFullYear(), month: date.getMonth(), day: date.getDate() };
 }
 
 // Creates a Date whose UTC value equals noon in `timezone` for the location calendar
@@ -93,17 +97,21 @@ function getLocalDateParts(date: Date, timezone?: string): { year: number; month
 // target date maps to the following local day.
 function locationNoonForComponents(year: number, month0: number, day: number, timezone?: string): Date {
   if (!timezone) {
-    const d = new Date(year, month0, day, 12, 0, 0, 0);
-    return d;
+    return new Date(year, month0, day, 12, 0, 0, 0);
   }
-  const probe = new Date(Date.UTC(year, month0, day, 12));
-  const str = new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(probe);
-  const [pY, pM, pD] = str.split('-').map(Number);
-  const finalProbe =
-    pY === year && pM - 1 === month0 && pD === day
-      ? probe
-      : new Date(Date.UTC(year, month0, day - 1, 12));
-  return new Date(getLocationMidnightUTC(finalProbe, timezone).getTime() + 12 * 3600 * 1000);
+  try {
+    const probe = new Date(Date.UTC(year, month0, day, 12));
+    const str = new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(probe);
+    const [pY, pM, pD] = str.split('-').map(Number);
+    const finalProbe =
+      pY === year && pM - 1 === month0 && pD === day
+        ? probe
+        : new Date(Date.UTC(year, month0, day - 1, 12));
+    return new Date(getLocationMidnightUTC(finalProbe, timezone).getTime() + 12 * 3600 * 1000);
+  } catch {
+    // Invalid timezone — fall back to device-local noon
+    return new Date(year, month0, day, 12, 0, 0, 0);
+  }
 }
 
 function CalendarModal({
@@ -272,9 +280,14 @@ function SectionHeader({ title }: { title: string }) {
 
 // Cache key uses location-tz date string to avoid stale entries across timezone changes
 function makeCacheKey(date: Date, lat: number, lon: number, timezone?: string): string {
-  const dateStr = timezone
-    ? new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(date)
-    : `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+  let dateStr = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+  if (timezone) {
+    try {
+      dateStr = new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(date);
+    } catch {
+      // Invalid timezone — use device-local date string
+    }
+  }
   return `${dateStr}|${lat}|${lon}`;
 }
 
