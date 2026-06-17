@@ -88,11 +88,15 @@ export async function fetchTimezone(lat: number, lon: number): Promise<string | 
     );
     if (!res.ok) return undefined;
     const data = await res.json();
-    const tz: unknown = data.timeZone;
+    let tz: unknown = data.timeZone;
     if (typeof tz !== 'string' || !tz) return undefined;
+    // America/Ciudad_Juarez was added in tzdata 2022g; Android 11 (tzdata 2021a) rejects it.
+    // El Paso TX observes identical US Mountain DST rules, so America/Denver is correct.
+    if (tz === 'America/Ciudad_Juarez') tz = 'America/Denver';
+    const tzStr = tz as string;
     // Reject non-IANA strings (e.g. "Mountain Standard Time") that Android ICU rejects
-    try { Intl.DateTimeFormat(undefined, { timeZone: tz }); } catch { return undefined; }
-    return tz;
+    try { Intl.DateTimeFormat(undefined, { timeZone: tzStr }); } catch { return undefined; }
+    return tzStr;
   } catch {
     return undefined;
   }
