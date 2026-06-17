@@ -52,6 +52,8 @@ function FirstRunGate() {
     }
   }, [place]);
 
+  if (isLoading) return null;
+
   return (
     <LocationModal
       visible={modalVisible}

@@ -559,6 +559,8 @@ const cal = StyleSheet.create({
   },
   doneBtn: {
     backgroundColor: '#000',
+    borderWidth: 2,
+    borderColor: 'transparent',
     paddingHorizontal: 28,
     paddingVertical: 10,
   },
