@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Tabs } from 'expo-router';
-import { Text, View, Modal, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { LocationProvider } from '@/contexts/LocationContext';
 import { useLocation } from '@/contexts/LocationContext';
 import LocationModal from '@/components/LocationModal';
@@ -11,27 +11,16 @@ const unmountScreen = { unmountOnBlur: true } as object;
 
 function LoadingScreen() {
   const { isLoading } = useLocation();
-  return (
-    <Modal visible={isLoading} animationType="none" transparent={false} statusBarTranslucent>
-      <View style={ls.container}>
-        <Text style={ls.title}>AstroWatch</Text>
-      </View>
-    </Modal>
-  );
+  if (!isLoading) return null;
+  return <View style={ls.overlay} />;
 }
 
 const ls = StyleSheet.create({
-  container: {
-    flex: 1,
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    color: '#000',
-    fontSize: 24,
-    fontWeight: '700',
-    letterSpacing: 2,
+    zIndex: 9999,
+    elevation: 9999,
   },
 });
 
