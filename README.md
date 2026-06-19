@@ -68,8 +68,8 @@ Download the latest APK from the Releases section of this repository.
 
 ## Navigation
 
-- Tap the moon icon on the Sky tab to open the Moon tab.
-- Tap the sun icon on the Moon tab to return to the Sky tab.
+- Tap the moon icon on the Sky tab to open the Moon tab (or swipe left).
+- Tap the sun icon on the Moon tab to return to the Sky tab (or swipe right).
 - Tap the date at the top of the Sky tab to open the calendar.
 - Tap Today in the calendar to return to the current date.
 - Tap the month name at the top of the Moon tab to return to the current month.
